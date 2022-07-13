@@ -1,0 +1,6 @@
+.messenger .left-side .top{
+    flex-wrap: wrap;
+}
+.messenger .message-send-section{
+    margin-bottom: 1%;
+}
