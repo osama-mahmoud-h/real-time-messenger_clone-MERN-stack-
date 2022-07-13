@@ -14,3 +14,5 @@ in this project
 - you can search your friends ( if user contain search word)
 - user can send images
 - user can logout ( jwt cookie is cleared)
+- demo vedio : 
+https://youtu.be/VZN9nSBHflg
