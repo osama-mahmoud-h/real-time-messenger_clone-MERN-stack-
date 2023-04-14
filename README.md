@@ -1,35 +1,23 @@
 # messenger_clone
-messenger clone using mern stack (node.js,express.js,react.js,mongodb)
-basic (real-time) messenger clone using #mern stack and #websockets
+📱 Messenger Clone using MERN Stack:
 
-i am just write reactjs code 
+📦 Node.js
+🌐 Express.js
+⚛️ React.js
+🗃️ MongoDB
+🚀 Basic (Real-Time) Messenger Clone using MERN Stack and WebSockets.
 
-, interested more about #backend 
+In this project:
 
-in this project 
-
-- user can login & register
-
-- home page is protected (user must have account and login )
-
-- jwt authentication and stored in http-only cookie 🍪
-
-- if user online , 'll appear for others with green mark 
-
-- you can see if your friends typing message to you
-
-- message is delivered using websockets 
-
-- messages  stored in mongodb using websockets too (not http request)
-
-- you can search your friends ( if user contain search word)
-
-- user can send images 
-
-- user can logout ( jwt cookie is cleared)
-
-- deployed on heroku https://lnkd.in/dJ-Ejh7d 
-- 
-
+🔑 User can login and register.
+🔒 Home page is protected (User must have an account and login).
+🔒 JWT authentication and stored in an HTTP-only cookie.
+🟢 If user is online, they will appear for others with a green mark.
+📝 You can see if your friends are typing a message to you.
+📨 Message is delivered using WebSockets.
+💾 Messages are stored in MongoDB using WebSockets (Not HTTP Request).
+🔍 You can search your friends (If user contains search word).
+📷 User can send images.
+🔑 User can logout (JWT cookie is cleared).
 - demo vedio : 
 https://youtu.be/VZN9nSBHflg
