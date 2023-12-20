@@ -1,0 +1,46 @@
+{
+  "name": "messenger_clone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "ts-node --transpile-only src/server.ts",
+    "dev": "nodemon --exec ts-node-dev src/server.ts",
+    "jsdev": "nodemon --exec ts-node --transpile-only src/server.ts",
+    "build": "tsc --outDir dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/helmet": "^4.0.0",
+    "@types/redis": "^4.0.11",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "concurrently": "^7.1.0",
+    "config": "3.3.1",
+    "cookie-parser": "^1.4.6",
+    "corn": "^0.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "formidable": "^2.0.1",
+    "helmet": "^7.1.0",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.1",
+    "peerjs": "^1.4.4",
+    "redis": "^4.6.12",
+    "socket.io": "^4.5.0",
+    "socket.io-stream": "^0.9.1",
+    "socketio-file-upload": "^0.7.3",
+    "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.6",
+    "@types/express": "^4.17.21",
+    "@types/formidable": "^3.4.5",
+    "@types/jsonwebtoken": "^9.0.5"
+  }
+}
