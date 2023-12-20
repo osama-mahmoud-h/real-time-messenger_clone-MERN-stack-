@@ -6,6 +6,15 @@ import bcrypt from "bcrypt";
 import fs from "fs";
 
 export class AuthService {
+    /**
+     * Authenticates a user by their email and password.
+     * @param email - The user's email.
+     * @param password - The user's password.
+     * @returns The authenticated user.
+     * @throws Error if email or password is not provided.
+     * @throws NotFoundError if user is not found.
+     * @throws BadRequestError if credentials are invalid.
+     */
     static login = async (email: string, password: string) => {
         if (!email) {
             throw new Error('you should provide email')
@@ -26,6 +35,19 @@ export class AuthService {
         return user;
     };
 
+    /**
+     * Registers a new user.
+     * 
+     * @param userName - The username of the user.
+     * @param email - The email of the user.
+     * @param password - The password of the user.
+     * @param confirmPassword - The confirmation password of the user.
+     * @param image - The image of the user.
+     * @returns The saved user object.
+     * @throws Error if any required field is missing.
+     * @throws BadRequestError if the password and confirmPassword do not match or if the password is less than 6 characters.
+     * @throws BadRequestError if the email is already taken.
+     */
     static register = async (userName: string,
                              email: string,
                              password: string,
@@ -51,23 +73,6 @@ export class AuthService {
         if (oldUser) {
             throw new BadRequestError("this email already token try diffrent one");
         }
-
-        // if (image) {
-        //     //generate random number
-        //     const random = Math.floor(Math.random() * 10e9);
-        //     //new unique name
-        //     image.newFilename = random + image.originalFilename;
-        //     //new path
-        //     const newPath = __dirname + '/../client/build/uploads/images/' + image.newFilename;
-
-        //     const fileCopying = await new Promise((fill, reject) => {
-        //         fs.copyFile(image.filepath, newPath, (err) => {
-        //             if (err)
-        //                 reject("image uploading error");
-        //             fill("copied successfully");
-        //         })
-        //     });
-        // }
 
         //hash password
         const salt = await bcrypt.genSalt(8);

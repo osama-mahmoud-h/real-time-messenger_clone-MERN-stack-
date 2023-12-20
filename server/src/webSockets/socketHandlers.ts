@@ -17,6 +17,12 @@ export class SocketEventHandler {
         this.io = io;
         // this.setupEventHandlers();
     }
+    /**
+     * Returns the singleton instance of SocketEventHandler.
+     * If the instance does not exist, it creates a new one.
+     * @param io - The Socket.IO server instance.
+     * @returns The singleton instance of SocketEventHandler.
+     */
     public static getInstance(io: Server): SocketEventHandler {
         if (!SocketEventHandler.instance) {
             SocketEventHandler.instance = new SocketEventHandler(io);
@@ -24,46 +30,28 @@ export class SocketEventHandler {
         return SocketEventHandler.instance;
     }
 
+    /**
+     * Sets up event handlers for socket connections.
+     * @returns {Promise<void>} A promise that resolves when the event handlers are set up.
+     */
     public setupEventHandlers = async()=> {
         this.io.on('connection', async(socket: Socket) => {
 
             await this.handleConnect(socket);
 
-            socket.on('message', (message: string) => {
-                this.handleMessage(socket, message);
-            });
-
             socket.on('disconnect', () => {
                 this.handleDisconnect(socket);
             });
 
-            //this.io.to(socket.id).emit("notification","daoooooooooo")
         });
     };
 
-    // public emitNotification = (userId:string, data:any)=>{
-    //     const getUserSocketId = this.onlineUsers.getSocketId(userId);
-    //     console.log("🚀 ~ file: sockets.ts:34 ~ SocketEventHandler ~ getUserSocketId:",userId, getUserSocketId)
-    //     if(getUserSocketId){
-    //         this.io.to(getUserSocketId).emit("notification",data);
-    //     }
-    // };
-
-    private handleSendJwt = (socket: Socket)=>{
-        socket.on("my-jwt",(data:any)=>{
-            console.log("jwt: ",data);
-            const decodedToken = JwtService.decodeToken(data);
-            if(decodedToken && decodedToken?._id){
-                this.onlineUsers.registerNewUser(socket.id,decodedToken._id);
-                const count = this.onlineUsers.getOnlineUsersCount();
-                console.log(`Socket.IO client connected (ID: ${socket.id}), userid:${ decodedToken?._id}, count: ${count}`);
-            }else{ //send Erorr
-
-            }
-            console.log("my-jwt:decodedToken: ",decodedToken?._id,', ',socket.id);
-        });
-    };
-
+    /**
+     * Handles the incoming message from a socket.
+     * @param {Socket} socket - The socket object.
+     * @param {string} message - The message received from the client.
+     * @returns {void}
+     */
     private handleMessage(socket: Socket, message: string) {
         console.log(`Received: ${message}`);
 
@@ -73,11 +61,23 @@ export class SocketEventHandler {
 
 
 
+    /**
+     * Handles the disconnection of a Socket.IO client.
+     * Removes the user from the list of online users and logs the disconnection.
+     * @param socket - The Socket.IO socket object representing the disconnected client.
+     */
     private handleDisconnect = async (socket: Socket)=> {
         await this.onlineUsers.removeUser(socket.id);
         const count = await this.onlineUsers.getOnlineUsersCount();
         console.log(`Socket.IO client disconnected (ID: ${socket.id}), count: ${count}`);
     }
+    
+    /**
+     * Handles the connection event for a socket.
+     * Registers the new user with the onlineUsers service, logs the socket information, and invokes the messengerHandler.
+     * @param socket - The socket object representing the connection.
+     * @returns {Promise<void>} - A promise that resolves when the connection handling is complete.
+     */
     private handleConnect = async (socket: Socket)=> {
         await this.onlineUsers.registerNewUser(socket.id,socket.data.userId);
         const count = await this.onlineUsers.getOnlineUsersCount();
@@ -86,8 +86,11 @@ export class SocketEventHandler {
         this.messengerHandler(socket);
     };
 
+    /**
+     * Handles the messaging functionality for a socket connection.
+     * @param socket - The socket connection.
+     */
     private messengerHandler = async (socket:Socket)=>{
-        
         SocketController.handlePrivateMessage(this.io,socket);
         SocketController.handleGetAllFriends(this.io, socket);
         SocketController.handleTypingMessage(this.io, socket)

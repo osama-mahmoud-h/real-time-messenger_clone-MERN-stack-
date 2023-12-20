@@ -3,14 +3,24 @@ import {ErrorHandler} from "./ErrorHandler";
 import {UnauthorizedError} from "../errors/UnauthorizedError";
 import {JwtService} from "./JwtService";
 
+/**
+ * Middleware for user authentication.
+ */
 export class UserAuthMiddleware {
+    /**
+     * Verifies the user token and sets the current user in the request object.
+     * @param req - The request object.
+     * @param res - The response object.
+     * @param next - The next function to call.
+     * @returns The next function or an error handler.
+     */
     static verifyToken = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const token = req.cookies?._token;
             if (!token) {
                 throw new UnauthorizedError("unauthorized user");
             }
-            const decoded: any = await JwtService.decodeToken(token);
+            const decoded: any =  JwtService.decodeToken(token);
             if (!decoded) {
                 throw new UnauthorizedError("unauthorized user");
             }

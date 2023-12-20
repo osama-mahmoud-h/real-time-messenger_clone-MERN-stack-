@@ -16,18 +16,39 @@ import {redisClient} from "./config/redis";
 import cookieParser from "cookie-parser";
 import {SocketAuthMiddleware} from "./middlewares/socketAuthMiddleware";
 
+/**
+ * Represents an Express server for a real-time chatting messenger.
+ */
 export class ExpressServer {
+    /**
+     * The singleton instance of the ExpressServer class.
+     */
     private static instance: ExpressServer;
-    private readonly expressApp: Application =
-        App.getInstance().getExpressApp();
 
+    /**
+     * The Express application instance.
+     */
+    private readonly expressApp: Application = App.getInstance().getExpressApp();
+
+    /**
+     * The HTTP server instance.
+     */
     private readonly server: http.Server;
 
+    /**
+     * Constructs a new instance of the ExpressServer class.
+     * Private to enforce singleton pattern.
+     */
     private constructor() {
         this.server = http.createServer(this.expressApp);
         this.start();
     }
 
+    /**
+     * Returns the singleton instance of the ExpressServer class.
+     * If the instance does not exist, it creates a new one.
+     * @returns The ExpressServer instance.
+     */
     public static getServerInstance(): ExpressServer {
         if (!ExpressServer.instance) {
             ExpressServer.instance = new ExpressServer();
@@ -35,6 +56,11 @@ export class ExpressServer {
         return ExpressServer.instance;
     };
 
+    /**
+     * Starts the server by performing necessary setup tasks.
+     * This includes establishing database connection, setting up middlewares,
+     * configuring routes, setting up WebSocket, and running the server.
+     */
     private start = async () => {
         await this.dbConnection();
         this.setupMiddlewares();
@@ -43,26 +69,40 @@ export class ExpressServer {
         this.runServer();
     };
 
+    /**
+     * Sets up the routes for the Express application.
+     */
     private setUpRoutes(): void {
         this.expressApp.use("/api/messenger/user", UserAuthRouter);
-
     };
 
+    /**
+     * Establishes the database connection.
+     * @returns A Promise that resolves when the connection is established.
+     */
     private dbConnection = async (): Promise<void> => {
         try {
-            await  mongodbConfig();
+            await mongodbConfig();
         } catch (err: any) {
-            console.log("dbConnection err: ",err);
+            console.log("dbConnection err: ", err);
         }
     };
+
+    /**
+     * Sets up the middlewares for the Express application.
+     */
     private setupMiddlewares = (): void => {
-        this.expressApp.use(bodyParser.json({limit: '20mb'}));
+        this.expressApp.use(bodyParser.json({ limit: '20mb' }));
         this.expressApp.use(cookieParser());
         this.expressApp.use(express.json());
         this.expressApp.use(cors(getCorsOptions()));
-        this.expressApp.use(helmet.crossOriginResourcePolicy({policy: "cross-origin"}));
+        this.expressApp.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
         this.expressApp.disable("x-powered-by");
     };
+
+    /**
+     * Sets up the WebSocket for real-time communication.
+     */
     private setupWebSocket = (): void => {
         const io = SocketServer.getInstance(this.server, getCorsOptions()).getIO();
         io.use(SocketAuthMiddleware.verifyTokenMiddleware);
@@ -70,14 +110,16 @@ export class ExpressServer {
         socketHandler.setupEventHandlers();
     };
 
+    /**
+     * Runs the server by listening on the specified port.
+     */
     private runServer(): void {
         const PORT = process.env.PORT || 3000;
         this.server.listen(PORT, () => {
             console.log(`Server is running in http://localhost:${PORT}`);
         });
     };
-
 }
 
-// start the server
+// start the server(entry point).
 ExpressServer.getServerInstance();
