@@ -7,6 +7,14 @@ import {IncomingForm, Fields, Files} from 'formidable';
 import {UserModel} from "../models/User.model";
 
 export class AuthController {
+   
+    /**
+     * Logs in a user.
+     * 
+     * @param req - The request object.
+     * @param res - The response object.
+     * @returns A success response with the user's information and token if login is successful, or an error response if there is an error.
+     */
     static login = async (req: Request, res: Response) => {
         try {
             const {email, password} = req.body;
@@ -49,6 +57,13 @@ export class AuthController {
         }
     };
 
+    /**
+     * Registers a new user.
+     * 
+     * @param req - The request object.
+     * @param res - The response object.
+     * @returns The response with the registered user's details.
+     */
     static register = async (req: Request, res: Response) => {
         try {
             const formData = new IncomingForm();
@@ -91,6 +106,12 @@ export class AuthController {
         }
     };
 
+    /**
+     * Logout user by clearing the authentication token cookie.
+     * @param req - The request object.
+     * @param res - The response object.
+     * @returns A success response indicating that the user has been logged out successfully.
+     */
     static logout = async (req: Request, res: Response) => {
         try {
             res.clearCookie('_token');
@@ -100,6 +121,12 @@ export class AuthController {
         }
     };
 
+    /**
+     * Retrieves user information based on the authenticated user's ID.
+     * @param req - The request object.
+     * @param res - The response object.
+     * @returns A success response with the user information if found, or an error response if not found.
+     */
     static getUserInfo = async (req: Request, res: Response) => {
         try {
             const id = req.user?.id;

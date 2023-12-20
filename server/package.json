@@ -34,6 +34,7 @@
     "socket.io": "^4.5.0",
     "socket.io-stream": "^0.9.1",
     "socketio-file-upload": "^0.7.3",
+    "ts-node": "^10.9.2",
     "validator": "^13.7.0"
   },
   "devDependencies": {
